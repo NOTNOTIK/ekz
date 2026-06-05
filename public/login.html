@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Вход - Корочки.есть</title>
+     <link rel="stylesheet" href="style.css">
+    <style>
+     /*   body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f2f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        h1 { text-align: center; margin-bottom: 20px; }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .error { color: red; margin-top: 10px; text-align: center; }
+        .link { text-align: center; margin-top: 15px; }
+        a { color: #007bff; text-decoration: none; }*/
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Слайдер -->
+<!--<div class="slider-container">
+    <div class="slider">
+        <div class="slider-images" id="sliderImages">
+             <img class="slide" src="images/image09.webp" alt="Курсы">
+            <img class="slide" src="images/image10.webp" alt="Обучение">
+            <img class="slide" src="images/image12.webp" alt="Диплом">
+            <img class="slide" src="images/image13.webp" alt="Карьера">
+        </div>
+        <button class="slider-btn prev" id="prevBtn">←</button>
+        <button class="slider-btn next" id="nextBtn">→</button>
+        <div class="slider-dots" id="sliderDots"></div>
+    </div>
+</div>-->
+        <h1>Вход</h1>
+        <input type="text" id="login" placeholder="Логин" autocomplete="off">
+        <input type="password" id="password" placeholder="Пароль">
+        <button onclick="login()">Войти</button>
+        <div id="error" class="error"></div>
+        <div class="link">
+            <a href="/register">Еще не зарегистрированы? Регистрация</a>
+        </div>
+    </div>
+
+    <script>
+        async function login() {
+            const login = document.getElementById('login').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error');
+            
+            if (!login || !password) {
+                errorDiv.innerText = 'Заполните все поля';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ login, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (data.isAdmin) {
+                        window.location.href = '/admin';
+                    } else {
+                        window.location.href = '/dashboard';
+                    }
+                } else {
+                    errorDiv.innerText = data.error || 'Ошибка входа';
+                }
+            } catch (err) {
+                errorDiv.innerText = 'Ошибка соединения';
+            }
+        }
+        
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+    <script src="slider.js"></script>
+</body>
+</html>

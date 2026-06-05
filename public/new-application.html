@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Новая заявка - Корочки.есть</title>
+     <link rel="stylesheet" href="style.css">
+    <style>
+      /*  * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            width: auto;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 8px;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: normal;
+        }
+        .error {
+            color: red;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        .success {
+            color: green;
+            margin-top: 8px;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            color: #667eea;
+            text-decoration: none;
+        }*/
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Слайдер -->
+<!--<div class="slider-container">
+    <div class="slider">
+        <div class="slider-images" id="sliderImages">
+               <img class="slide" src="images/image09.webp" alt="Курсы">
+            <img class="slide" src="images/image10.webp" alt="Обучение">
+            <img class="slide" src="images/image12.webp" alt="Диплом">
+            <img class="slide" src="images/image13.webp" alt="Карьера">
+        </div>
+        <button class="slider-btn prev" id="prevBtn">←</button>
+        <button class="slider-btn next" id="nextBtn">→</button>
+        <div class="slider-dots" id="sliderDots"></div>
+    </div>
+</div>-->
+        <div class="header">
+            <h1>Новая заявка</h1>
+            <button class="btn-outline" onclick="location.href='/dashboard'" style="background: rgba(255,255,255,0.2); padding: 8px 16px;">← Назад</button>
+        </div>
+
+        <div class="card">
+            <div class="form-group">
+                <label>📖 Название курса</label>
+                <select id="course_name">
+                    <option value="">Выберите курс</option>
+                    <option value="Основы алгоритмизации и программирования">Основы алгоритмизации и программирования</option>
+                    <option value="Основы веб-дизайна">Основы веб-дизайна</option>
+                    <option value="Основы проектирования баз данных">Основы проектирования баз данных</option>
+                </select>
+                <div id="courseError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label>📅 Желаемая дата начала</label>
+                <input type="text" id="start_date" placeholder="ДД.ММ.ГГГГ" maxlength="10">
+                <div id="dateError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label>💳 Способ оплаты</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="payment" value="cash"> Наличными
+                    </label>
+                    <label>
+                        <input type="radio" name="payment" value="transfer"> Перевод по номеру телефона
+                    </label>
+                </div>
+                <div id="paymentError" class="error"></div>
+            </div>
+
+            <button class="btn" onclick="submitApplication()">Отправить заявку</button>
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <script>
+        // Маска для ввода даты ДД.ММ.ГГГГ
+        document.getElementById('start_date').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) value = value.slice(0,2) + '.' + value.slice(2);
+            if (value.length >= 5) value = value.slice(0,5) + '.' + value.slice(5,9);
+            e.target.value = value.slice(0,10);
+        });
+
+        function validateDate(dateStr) {
+            const regex = /^(\d{2})\.(\d{2})\.(\d{4})$/;
+            if (!regex.test(dateStr)) return false;
+            const day = parseInt(RegExp.$1);
+            const month = parseInt(RegExp.$2);
+            const year = parseInt(RegExp.$3);
+            const date = new Date(year, month - 1, day);
+            return date.getFullYear() === year && 
+                   date.getMonth() === month - 1 && 
+                   date.getDate() === day &&
+                   date >= new Date();
+        }
+
+        async function submitApplication() {
+            const course_name = document.getElementById('course_name').value;
+            const start_date = document.getElementById('start_date').value;
+            const paymentMethod = document.querySelector('input[name="payment"]:checked');
+            const messageDiv = document.getElementById('message');
+
+            document.getElementById('courseError').innerText = '';
+            document.getElementById('dateError').innerText = '';
+            document.getElementById('paymentError').innerText = '';
+
+            let isValid = true;
+
+            if (!course_name) {
+                document.getElementById('courseError').innerText = 'Выберите курс';
+                isValid = false;
+            }
+            if (!start_date) {
+                document.getElementById('dateError').innerText = 'Введите дату';
+                isValid = false;
+            } else if (!validateDate(start_date)) {
+                document.getElementById('dateError').innerText = 'Неверный формат (ДД.ММ.ГГГГ) или дата в прошлом';
+                isValid = false;
+            }
+            if (!paymentMethod) {
+                document.getElementById('paymentError').innerText = 'Выберите способ оплаты';
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            try {
+                const res = await fetch('/api/applications', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        course_name,
+                        start_date,
+                        payment_method: paymentMethod.value
+                    })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    messageDiv.className = 'success';
+                    messageDiv.innerText = '✅ Заявка отправлена! Перенаправление...';
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1500);
+                } else {
+                    messageDiv.className = 'error';
+                    messageDiv.innerText = data.error || 'Ошибка отправки';
+                }
+            } catch (err) {
+                messageDiv.className = 'error';
+                messageDiv.innerText = 'Ошибка соединения';
+            }
+        }
+    </script>
+    <script src="slider.js"></script>
+</body>
+</html>

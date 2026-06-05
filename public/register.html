@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Регистрация - Корочки.есть</title>
+     <link rel="stylesheet" href="style.css">
+    <style>
+       /* body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f0f2f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 350px;
+        }
+        h1 { text-align: center; margin-bottom: 20px; }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .error { color: red; margin-top: 10px; text-align: center; font-size: 14px; }
+        .success { color: green; margin-top: 10px; text-align: center; }
+        .link { text-align: center; margin-top: 15px; }
+        a { color: #007bff; text-decoration: none; }*/
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Слайдер -->
+<!--<div class="slider-container">
+    <div class="slider">
+        <div class="slider-images" id="sliderImages">
+            <img class="slide" src="images/image09.webp" alt="Курсы">
+            <img class="slide" src="images/image10.webp" alt="Обучение">
+            <img class="slide" src="images/image12.webp" alt="Диплом">
+            <img class="slide" src="images/image13.webp" alt="Карьера">
+        </div>
+        <button class="slider-btn prev" id="prevBtn">←</button>
+        <button class="slider-btn next" id="nextBtn">→</button>
+        <div class="slider-dots" id="sliderDots"></div>
+    </div>
+</div>-->
+        <h1>Регистрация</h1>
+        <input type="text" id="login" placeholder="Логин (мин 6 символов, латиница/цифры)">
+        <input type="password" id="password" placeholder="Пароль (мин 8 символов)">
+        <input type="text" id="full_name" placeholder="ФИО">
+        <input type="text" id="phone" placeholder="Телефон 8(XXX)XXX-XX-XX">
+        <input type="email" id="email" placeholder="Email">
+        <button onclick="register()">Зарегистрироваться</button>
+        <div id="message"></div>
+        <div class="link">
+            <a href="/login">Уже есть аккаунт? Войти</a>
+        </div>
+    </div>
+
+    <script>
+        async function register() {
+            const login = document.getElementById('login').value;
+            const password = document.getElementById('password').value;
+            const full_name = document.getElementById('full_name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const messageDiv = document.getElementById('message');
+            
+            // Простая валидация
+            if (login.length < 6) {
+                messageDiv.className = 'error';
+                messageDiv.innerText = 'Логин должен быть минимум 6 символов';
+                return;
+            }
+            if (password.length < 8) {
+                messageDiv.className = 'error';
+                messageDiv.innerText = 'Пароль должен быть минимум 8 символов';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ login, password, full_name, phone, email })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    messageDiv.className = 'success';
+                    messageDiv.innerText = '✅ Регистрация успешна! Перенаправление...';
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1500);
+                } else {
+                    messageDiv.className = 'error';
+                    messageDiv.innerText = data.error || 'Ошибка регистрации';
+                }
+            } catch (err) {
+                messageDiv.className = 'error';
+                messageDiv.innerText = 'Ошибка соединения';
+            }
+        }
+    </script>
+    <script src="slider.js"></script>
+</body>
+</html>
